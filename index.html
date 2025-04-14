@@ -1,214 +1,353 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lab Quality Audit Checklist</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-      line-height: 1.6;
-    }
-    h1 {
-      color: #2c3e50;
-      text-align: center;
-    }
-    .checklist {
-      background-color: #f9f9f9;
-      border-radius: 8px;
-      padding: 20px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    .checklist-item {
-      padding: 12px;
-      border-bottom: 1px solid #eee;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .options {
-      display: flex;
-      gap: 10px;
-    }
-    .option {
-      padding: 6px 12px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-    .option.selected-yes {
-      background-color: #27ae60;
-      color: white;
-      border-color: #27ae60;
-    }
-    .option.selected-no {
-      background-color: #e74c3c;
-      color: white;
-      border-color: #e74c3c;
-    }
-    button {
-      background-color: #3498db;
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 4px;
-      cursor: pointer;
-      margin-top: 20px;
-      font-size: 16px;
-    }
-    button:hover {
-      background-color: #2980b9;
-    }
-    .results {
-      margin-top: 20px;
-      background-color: #f9f9f9;
-      padding: 15px;
-      border-radius: 8px;
-      display: none;
-    }
-    .add-question {
-      margin-top: 20px;
-      display: flex;
-      gap: 10px;
-    }
-    .add-question input {
-      flex-grow: 1;
-      padding: 8px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-    }
-    .status {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      display: inline-block;
-      margin-right: 10px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratory Quality Audit Checklist</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        .audit-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .info-field {
+            flex: 1;
+            min-width: 250px;
+            margin: 10px;
+        }
+        .info-field input, .info-field select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .radio-group {
+            display: flex;
+            gap: 15px;
+        }
+        textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: vertical;
+        }
+        .btn-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 4px;
+            display: none;
+        }
+        .pass {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .fail {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+        @media print {
+            .no-print {
+                display: none;
+            }
+            body {
+                padding: 0;
+                background-color: white;
+            }
+            .container {
+                box-shadow: none;
+                padding: 0;
+                margin: 0;
+            }
+        }
+    </style>
 </head>
 <body>
-  <h1>Lab Quality Audit Checklist</h1>
-  
-  <div class="checklist" id="checklist">
-    <!-- Checklist items will be added here via JavaScript -->
-  </div>
-  
-  <div class="add-question">
-    <input type="text" id="new-question" placeholder="Add new audit question...">
-    <button onclick="addQuestion()">Add</button>
-  </div>
-  
-  <button onclick="generateReport()">Generate Report</button>
-  
-  <div class="results" id="results">
-    <h2>Audit Results</h2>
-    <div id="report-content"></div>
-  </div>
-  
-  <script>
-    // Initial questions
-    const questions = [
-      "Check HPLC",
-      "Check GC"
-    ];
-    
-    // Store answers
-    const answers = {};
-    
-    // Initialize the checklist
-    function initChecklist() {
-      const checklistDiv = document.getElementById('checklist');
-      checklistDiv.innerHTML = '';
-      
-      questions.forEach((question, index) => {
-        const item = document.createElement('div');
-        item.className = 'checklist-item';
-        item.innerHTML = `
-          <div>${question}</div>
-          <div class="options">
-            <div class="option yes" onclick="selectOption(${index}, 'yes')">Yes</div>
-            <div class="option no" onclick="selectOption(${index}, 'no')">No</div>
-          </div>
-        `;
-        checklistDiv.appendChild(item);
-      });
-    }
-    
-    // Handle option selection
-    function selectOption(questionIndex, answer) {
-      const question = questions[questionIndex];
-      answers[question] = answer;
-      
-      // Update UI to show selection
-      const options = document.querySelectorAll(`.checklist-item:nth-child(${questionIndex + 1}) .option`);
-      options.forEach(option => {
-        option.classList.remove('selected-yes', 'selected-no');
-      });
-      
-      if (answer === 'yes') {
-        options[0].classList.add('selected-yes');
-      } else {
-        options[1].classList.add('selected-no');
-      }
-    }
-    
-    // Add a new question
-    function addQuestion() {
-      const input = document.getElementById('new-question');
-      const newQuestion = input.value.trim();
-      
-      if (newQuestion) {
-        questions.push(newQuestion);
-        input.value = '';
-        initChecklist();
-      }
-    }
-    
-    // Generate report
-    function generateReport() {
-      const reportDiv = document.getElementById('report-content');
-      const resultsDiv = document.getElementById('results');
-      
-      resultsDiv.style.display = 'block';
-      
-      // Count stats
-      let totalQuestions = questions.length;
-      let answeredQuestions = Object.keys(answers).length;
-      let passedChecks = Object.values(answers).filter(a => a === 'yes').length;
-      
-      let reportHTML = `
-        <p><strong>Total Items:</strong> ${totalQuestions}</p>
-        <p><strong>Answered:</strong> ${answeredQuestions} (${Math.round(answeredQuestions/totalQuestions*100)}%)</p>
-        <p><strong>Passed:</strong> ${passedChecks} (${Math.round(passedChecks/totalQuestions*100)}%)</p>
-        <h3>Detailed Results</h3>
-        <ul>
-      `;
-      
-      questions.forEach(question => {
-        const answer = answers[question] || 'Not answered';
-        const color = answer === 'yes' ? '#27ae60' : answer === 'no' ? '#e74c3c' : '#95a5a6';
+    <div class="container">
+        <h1>Laboratory Quality Audit Checklist</h1>
         
-        reportHTML += `
-          <li>
-            <span class="status" style="background-color: ${color};"></span>
-            ${question}: <strong>${answer}</strong>
-          </li>
-        `;
-      });
-      
-      reportHTML += '</ul>';
-      reportDiv.innerHTML = reportHTML;
-      
-      // Scroll to results
-      resultsDiv.scrollIntoView({ behavior: 'smooth' });
-    }
-    
-    // Initialize on page load
-    window.onload = initChecklist;
-  </script>
+        <div class="audit-info">
+            <div class="info-field">
+                <label for="auditor">Auditor Name:</label>
+                <input type="text" id="auditor" name="auditor">
+            </div>
+            <div class="info-field">
+                <label for="lab">Laboratory Name/Department:</label>
+                <input type="text" id="lab" name="lab">
+            </div>
+            <div class="info-field">
+                <label for="date">Audit Date:</label>
+                <input type="date" id="date" name="date">
+            </div>
+            <div class="info-field">
+                <label for="reference">Audit Reference Number:</label>
+                <input type="text" id="reference" name="reference">
+            </div>
+        </div>
+        
+        <form id="auditForm">
+            <table id="checklistTable">
+                <thead>
+                    <tr>
+                        <th width="5%">No.</th>
+                        <th width="55%">Audit Question</th>
+                        <th width="15%">Response</th>
+                        <th width="25%">Remarks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Questions will be populated by JavaScript -->
+                </tbody>
+            </table>
+            
+            <div class="btn-container no-print">
+                <button type="button" id="calculateBtn">Calculate Audit Score</button>
+                <button type="button" id="printBtn">Print Audit Report</button>
+                <button type="button" id="resetBtn">Reset Form</button>
+            </div>
+        </form>
+        
+        <div id="result"></div>
+    </div>
+
+    <script>
+        // Array of audit questions
+        const auditQuestions = [
+            "Are laboratory control procedures updated and adhered to, especially regarding equipment calibration and data reprocessing?",
+            "Is there a documented schedule for retesting of materials that aligns with the established frequencies?",
+            "Are temperature and humidity monitored and documented for sample storage areas?",
+            "Do QC personnel receive regular training and assessments on SOP adherence and documentation practices?",
+            "Are laboratory worksheets reviewed and updated to ensure inclusion of all required documentation steps?",
+            "Are laboratory controls in place to ensure only validated methods are used for testing?",
+            "Is there a system for regular review and audit of laboratory methods and processes?",
+            "Are all microbial strain suitability tests included in the microbial enumeration test method validation?",
+            "Has the gas chromatography analysis for the limit of (b) (4) been included in raw material specifications?",
+            "Are laboratory control procedures documented and include method validation requirements?",
+            "Are periodic internal audits performed to verify compliance with laboratory control procedures?",
+            "Is there a process for immediate rectification of deviations found during lab audits?",
+            "Are laboratory records maintained on bound, pre-numbered pages?",
+            "Is there a procedure in place to ensure contemporaneous recording of data?",
+            "Are routine audits performed to verify compliance with laboratory documentation practices?",
+            "Are laboratory controls in place to ensure complete recording of analytical data?",
+            "Is there a regular audit process to check laboratory documentation practices?",
+            "Have all incomplete chromatographic data been thoroughly reviewed?",
+            "Are there procedures detailing the steps for investigating interrupted sequences in chromatographic data?",
+            "Is there training provided for laboratory personnel on updated investigation procedures?",
+            "Is the sample collection time recorded during dissolution tests as required by SOP-000550896?",
+            "Are analysts trained on the updated SOP requiring time recording?",
+            "Is there a mechanism for monitoring compliance with the updated SOP?",
+            "Are system suitability criteria clearly defined and consistently applied?",
+            "Are written testing procedures regularly reviewed and updated for clarity?",
+            "Are laboratory control measures in place to ensure all growth media lots are tested?",
+            "Are regular audits conducted to ensure compliance with laboratory control measures?",
+            "Is there documented evidence of retraining of laboratory personnel on updated protocols?",
+            "Are the laboratory procedures up to date with current sterility testing requirements?",
+            "Are laboratory audits conducted regularly to ensure compliance with updated testing methods?",
+            "Have laboratory procedures been revised to include impurity testing for all product strengths?",
+            "Is there a training program in place to educate laboratory personnel about updated testing procedures?",
+            "Are regular audits conducted to ensure compliance with updated laboratory procedures?",
+            "Are laboratory controls procedures aligned and validated with actual production conditions?",
+            "Is there a review mechanism for laboratory control standards vis-à-vis production conditions?",
+            "Are laboratory validation studies regularly conducted and documented for all critical control points?",
+            "Are the laboratory control procedures scientifically sound and documented?",
+            "Are environmental monitoring (EM) practices documented and reviewed?",
+            "Are the laboratory's sampling plans scientifically validated and regularly reviewed?",
+            "Is there continuous training for personnel on laboratory best practices and sampling methods?",
+            "Are laboratory tests scheduled and results obtained before release deadlines?",
+            "Is there a communication protocol with third-party labs for timely result reporting?",
+            "Are stability testing protocols for APIs post-process changes clearly defined and documented?",
+            "Are all scale-ups followed by appropriate revalidation?",
+            "Are specifications for particulate matter scientifically justified and documented for all products?",
+            "Is there a procedure for periodic review of particulate matter specifications?",
+            "Have discrepancies in testing protocols between similar products been addressed?",
+            "Are the Standard Test Procedures up-to-date and aligned with method validation reports?",
+            "Are all AMV protocols and reports documented and accessible?",
+            "Are laboratory test results validated with strict adherence to laboratory control procedures?",
+            "Are laboratory records reviewed and signed by a second qualified individual?",
+            "Does the review process include verification of physical environmental monitoring plates?",
+            "Is staff adequately trained on laboratory review procedures?",
+            "Are periodic audits conducted to ensure adherence to review procedures?",
+            "Are laboratory controls reviewed periodically to ensure their effectiveness?",
+            "Are GMP and R&D equipment clearly segregated and labeled?",
+            "Is there a controlled access policy for laboratory equipment?",
+            "Are all warning and error messages in Empower reviewed and documented as per SOP?",
+            "Is there a schedule for QC personnel to review system warnings and errors?"
+        ];
+
+        // Populate the table with questions
+        const tbody = document.querySelector('#checklistTable tbody');
+        
+        auditQuestions.forEach((question, index) => {
+            const row = document.createElement('tr');
+            
+            row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${question}</td>
+                <td>
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="q${index}" value="yes"> Yes
+                        </label>
+                        <label>
+                            <input type="radio" name="q${index}" value="no"> No
+                        </label>
+                        <label>
+                            <input type="radio" name="q${index}" value="na"> N/A
+                        </label>
+                    </div>
+                </td>
+                <td>
+                    <textarea name="remarks${index}" rows="2"></textarea>
+                </td>
+            `;
+            
+            tbody.appendChild(row);
+        });
+
+        // Calculate audit score
+        document.getElementById('calculateBtn').addEventListener('click', () => {
+            let totalQuestions = 0;
+            let yesCount = 0;
+            
+            for (let i = 0; i < auditQuestions.length; i++) {
+                const radios = document.getElementsByName(`q${i}`);
+                let answered = false;
+                
+                for (const radio of radios) {
+                    if (radio.checked) {
+                        answered = true;
+                        if (radio.value === 'yes') {
+                            yesCount++;
+                        }
+                        if (radio.value !== 'na') {
+                            totalQuestions++;
+                        }
+                        break;
+                    }
+                }
+                
+                if (!answered) {
+                    alert(`Please answer question ${i + 1}`);
+                    return;
+                }
+            }
+            
+            const score = totalQuestions > 0 ? Math.round((yesCount / totalQuestions) * 100) : 0;
+            const resultDiv = document.getElementById('result');
+            
+            let resultClass = 'warning';
+            let recommendation = 'Further improvements needed.';
+            
+            if (score >= 90) {
+                resultClass = 'pass';
+                recommendation = 'Excellent compliance level. Continue maintaining high standards.';
+            } else if (score >= 75) {
+                resultClass = 'warning';
+                recommendation = 'Good compliance level. Minor improvements needed in some areas.';
+            } else {
+                resultClass = 'fail';
+                recommendation = 'Significant improvements required. Immediate action plan recommended.';
+            }
+            
+            resultDiv.className = resultClass;
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `
+                <h2>Audit Results</h2>
+                <p><strong>Auditor:</strong> ${document.getElementById('auditor').value || 'Not specified'}</p>
+                <p><strong>Laboratory:</strong> ${document.getElementById('lab').value || 'Not specified'}</p>
+                <p><strong>Date:</strong> ${document.getElementById('date').value || 'Not specified'}</p>
+                <p><strong>Reference:</strong> ${document.getElementById('reference').value || 'Not specified'}</p>
+                <p><strong>Total compliance score:</strong> ${score}% (${yesCount} compliant items out of ${totalQuestions} applicable items)</p>
+                <p><strong>Recommendation:</strong> ${recommendation}</p>
+                <p><strong>Generated on:</strong> ${new Date().toLocaleString()}</p>
+            `;
+            
+            resultDiv.scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Print functionality
+        document.getElementById('printBtn').addEventListener('click', () => {
+            window.print();
+        });
+
+        // Reset form
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            if (confirm('Are you sure you want to reset the form? All entered data will be lost.')) {
+                document.getElementById('auditForm').reset();
+                document.getElementById('auditor').value = '';
+                document.getElementById('lab').value = '';
+                document.getElementById('date').value = '';
+                document.getElementById('reference').value = '';
+                document.getElementById('result').style.display = 'none';
+            }
+        });
+
+        // Set today's date as default
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('date').value = today;
+    </script>
 </body>
 </html>
